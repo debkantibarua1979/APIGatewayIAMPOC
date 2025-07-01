@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiGatewayIAMPOc", "ApiGatewayIAMPOc\ApiGatewayIAMPOc.csproj", "{64C6612E-83CA-48B3-A73A-0E0564E8D0CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resource", "Resource\Resource.csproj", "{E84B271A-23BA-40F1-80C5-2A5AE0F26FC2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{64C6612E-83CA-48B3-A73A-0E0564E8D0CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64C6612E-83CA-48B3-A73A-0E0564E8D0CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64C6612E-83CA-48B3-A73A-0E0564E8D0CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64C6612E-83CA-48B3-A73A-0E0564E8D0CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E84B271A-23BA-40F1-80C5-2A5AE0F26FC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E84B271A-23BA-40F1-80C5-2A5AE0F26FC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E84B271A-23BA-40F1-80C5-2A5AE0F26FC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E84B271A-23BA-40F1-80C5-2A5AE0F26FC2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
