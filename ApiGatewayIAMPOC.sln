@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiGatewayIAMPOc", "ApiGatewayIAMPOc\ApiGatewayIAMPOc.csproj", "{64C6612E-83CA-48B3-A73A-0E0564E8D0CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resource", "Resource\Resource.csproj", "{E84B271A-23BA-40F1-80C5-2A5AE0F26FC2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceProject", "ResourceProject\ResourceProject.csproj", "{E84B271A-23BA-40F1-80C5-2A5AE0F26FC2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
