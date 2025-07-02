@@ -150,7 +150,7 @@ public class UserService : IUserService
                 return false;
             }
 
-            //user.RoleId =  // Unassign role
+            user.RoleId = null;
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
             return true;
@@ -169,7 +169,7 @@ public class UserService : IUserService
 
             var rolePermission = new RolePermissionRole
             {
-                RoleId = user.RoleId,  // User’s role
+                RoleId = user.RoleId ?? Guid.Empty,  // User’s role
                 PermissionId = permissionId
             };
 

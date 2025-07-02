@@ -9,7 +9,7 @@ public class User
     public string Designation { get; set; }
 
     // Foreign key to Role
-    public Guid RoleId { get; set; }
+    public Guid? RoleId { get; set; }
     public Role Role { get; set; }  // Navigation property to Role
     
 }

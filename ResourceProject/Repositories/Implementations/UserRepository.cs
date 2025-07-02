@@ -1,6 +1,7 @@
 using ResourceProject.Entities;
+using ResourceProject.Repositories.Interfaces;
 
-namespace ResourceProject.Repositories.Interfaces;
+namespace ResourceProject.Repositories.Implementations;
 
 using Microsoft.EntityFrameworkCore;
 using ResourceProject.Data;

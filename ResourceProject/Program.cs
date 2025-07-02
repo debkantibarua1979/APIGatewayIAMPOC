@@ -117,12 +117,7 @@ app.UseSwaggerUI(c =>
 app.UseAuthentication();
 app.UseAuthorization();
 
-
-// Enable GraphQL Server
-app.MapGraphQL();
-
-// Map default controllers if any
+app.UseRouting();
 app.MapControllers();
-
-// Run the application
+app.MapGraphQL(); 
 app.Run();

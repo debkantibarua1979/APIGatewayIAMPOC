@@ -36,9 +36,9 @@ builder.Services.AddIdentityServer()
     .AddInMemoryApiScopes(Config.ApiScopes)
     .AddInMemoryApiResources(Config.ApiResources)
     .AddInMemoryClients(Config.Clients)
-    .AddInMemoryIdentityResources(Config.IdentityResources)
-    .AddProfileService<CustomProfileService>();
-*/
+    .AddInMemoryIdentityResources(Config.IdentityResources);
+*/  
+
 
 // Add JWT Bearer Authentication
 builder.Services.AddAuthentication()
