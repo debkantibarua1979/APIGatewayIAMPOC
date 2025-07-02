@@ -8,4 +8,5 @@ public interface IRolePermissionService
     Task<RolePermissionDto> GetPermissionForRoleAsync(Guid roleId, Guid permissionId);
     Task<bool> AddPermissionToRoleAsync(Guid roleId, Guid permissionId);
     Task<bool> RemovePermissionFromRoleAsync(Guid roleId, Guid permissionId);
+    Task<IEnumerable<RolePermissionDto>> GetAllRolePermissions();
 }

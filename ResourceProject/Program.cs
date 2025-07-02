@@ -33,7 +33,21 @@ builder.Services
     .AddInMemorySubscriptions(); 
 
 
+builder.Services.AddAuthorization(options =>
+{
+    // Automatically add policies based on permissions in the database
+    using (var scope = builder.Services.BuildServiceProvider().CreateScope())
+    {
+        var rolePermissionService = scope.ServiceProvider.GetRequiredService<IRolePermissionService>();
+        var permissions = rolePermissionService.GetAllRolePermissions().Result;
 
+        foreach (var permission in permissions)
+        {
+            options.AddPolicy(permission.ToString(), policy =>
+                policy.RequireClaim("permission", permission.ToString()));
+        }
+    }
+});
 
 
 // Add Swagger for API documentation (optional, you can remove it if not needed)
@@ -62,13 +76,6 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("CanReadDepartment", policy =>
-        policy.RequireClaim("permission", "CanReadDepartment"));
-    options.AddPolicy("CanWriteDepartment", policy =>
-        policy.RequireClaim("permission", "CanWriteDepartment"));
-});
 
 var app = builder.Build();
 

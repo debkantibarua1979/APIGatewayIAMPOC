@@ -27,6 +27,18 @@ public class RolePermissionService : IRolePermissionService
                 })
                 .ToListAsync();
         }
+        
+        public async Task<IEnumerable<RolePermissionDto>> GetAllRolePermissions()
+        {
+            return await _context.RolePermissionRoles
+                .Select(rpr => new RolePermissionDto
+                {
+                    RoleId = rpr.RoleId,
+                    PermissionId = rpr.PermissionId,
+                    PermissionName = rpr.RolePermission.PermissionName
+                })
+                .ToListAsync();
+        }
 
         public async Task<RolePermissionDto> GetPermissionForRoleAsync(Guid roleId, Guid permissionId)
         {
