@@ -1,6 +1,7 @@
 using ApiGatewayIAMPOc;
 using ApiGatewayIAMPOc.Data;
 using ApiGatewayIAMPOc.Entities;
+using ApiGatewayIAMPOc.Middlewares;
 using ApiGatewayIAMPOc.Services.Implementations;
 using ApiGatewayIAMPOc.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +15,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+
 builder.Services.AddScoped<ITokenService, TokenService>();
 
 // Add DbContext for Identity
@@ -53,6 +57,8 @@ var app = builder.Build();
 app.UseIdentityServer();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<TokenExpiryMiddleware>();
 
 app.MapControllers();
 app.Run();

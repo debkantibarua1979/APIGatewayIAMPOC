@@ -5,6 +5,7 @@ using ApiGatewayIAMPOc.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using ResourceProject.Entities;
 
 namespace ApiGatewayIAMPOc.Controllers;
 
@@ -15,13 +16,18 @@ public class AuthController : ControllerBase
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly IConfiguration _configuration;
+    private readonly RoleManager<Role> _roleManager;
 
-    public AuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
-        IConfiguration configuration)
+    public AuthController(
+        UserManager<ApplicationUser> userManager, 
+        SignInManager<ApplicationUser> signInManager,
+        IConfiguration configuration,
+        RoleManager<Role> roleManager)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _configuration = configuration;
+        _roleManager = roleManager;
     }
 
     [HttpPost("register")]
@@ -40,9 +46,7 @@ public class AuthController : ControllerBase
             return BadRequest(result.Errors);
         }
 
-        // Generate JWT token
-        var token = GenerateJwtToken(user);
-        return Ok(new { Token = token });
+        return Ok("Registration successful!");
     }
 
     [HttpPost("login")]
@@ -54,20 +58,45 @@ public class AuthController : ControllerBase
             return Unauthorized("Invalid credentials");
         }
 
+        // Get role and permissions
+        var roles = await _userManager.GetRolesAsync(user);
+        var permissions = new List<string>();
+        
+        foreach (var role in roles)
+        {
+            var roleEntity = await _roleManager.FindByNameAsync(role);
+            if (roleEntity != null)
+            {
+                permissions.AddRange(roleEntity.RolePermissionRoles.Select(rpr => rpr.RolePermission.PermissionName));
+            }
+        }
+
         // Generate JWT token
-        var token = GenerateJwtToken(user);
+        var token = GenerateJwtToken(user, roles, permissions);
         return Ok(new { Token = token });
     }
 
-    private string GenerateJwtToken(ApplicationUser user)
+    private string GenerateJwtToken(ApplicationUser user, IList<string> roles, List<string> permissions)
     {
         var claims = new List<Claim>
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(ClaimTypes.NameIdentifier, user.Id),
-            new Claim(ClaimTypes.Email, user.Email)
+            new Claim(ClaimTypes.Email, user.Email),
         };
+
+        // Add role claims
+        foreach (var role in roles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role));
+        }
+
+        // Add permissions as claims
+        foreach (var permission in permissions)
+        {
+            claims.Add(new Claim("permission", permission));
+        }
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
