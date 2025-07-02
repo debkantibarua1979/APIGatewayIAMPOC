@@ -14,6 +14,7 @@ public class AppDbContext: DbContext
     public DbSet<Department> Departments { get; set; }
     public DbSet<Project> Projects { get; set; }
     public DbSet<Task> Tasks { get; set; }
+    public DbSet<RolePermissionRole> RolePermissionRoles { get; set; } 
 
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
@@ -46,6 +47,7 @@ public class AppDbContext: DbContext
             .WithOne(rpr => rpr.RolePermission)     // Each RolePermissionRole links to one RolePermission
             .HasForeignKey(rpr => rpr.PermissionId); // Foreign key for PermissionId
 
+        modelBuilder.Entity<UserRole>().HasKey(ur => new { ur.UserId, ur.RoleId });
         // Define composite keys for the join entity RolePermissionRole
         modelBuilder.Entity<RolePermissionRole>().HasKey(rp => new { rp.RoleId, rp.PermissionId });
     }

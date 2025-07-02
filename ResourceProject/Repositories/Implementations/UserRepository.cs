@@ -47,4 +47,18 @@ public class UserRepository : IUserRepository
         await _context.SaveChangesAsync();
         return true;
     }
+    
+    public async Task<bool> AssignRoleToUserAsync(Guid userId, Guid roleId)
+    {
+        var user = await _context.Users.FindAsync(userId);
+        var role = await _context.Roles.FindAsync(roleId);
+
+        if (user == null || role == null) return false;
+
+        user.RoleId = roleId;
+        user.Role = role;
+
+        await _context.SaveChangesAsync();
+        return true;
+    }
 }

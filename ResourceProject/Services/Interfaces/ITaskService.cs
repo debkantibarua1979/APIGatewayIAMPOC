@@ -1,4 +1,4 @@
-namespace ResourceProject.Services;
+namespace ResourceProject.Services.Interfaces;
 
 public interface ITaskService
 {
