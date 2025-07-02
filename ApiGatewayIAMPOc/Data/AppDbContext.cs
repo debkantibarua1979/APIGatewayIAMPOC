@@ -1,11 +1,13 @@
 using ApiGatewayIAMPOc.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiGatewayIAMPOc.Data;
 
-public class AppDbContext: DbContext
+public class AppDbContext: IdentityDbContext<ApplicationUser>
 {
     public DbSet<TokenStorage> TokenStorages { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
