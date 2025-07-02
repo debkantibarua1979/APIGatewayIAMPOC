@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using ResourceProject.Data;
+using ResourceProject.Repositories;
+using ResourceProject.Repositories.Implementations;
+using ResourceProject.Repositories.Interfaces;
 using ResourceProject.Resolvers.Mutations;
 using ResourceProject.Resolvers.Queries;
 using ResourceProject.Services.Implementations;
@@ -31,6 +34,24 @@ builder.Services
     .AddType<RolePermissionMutation>() 
     .AddAuthorization() 
     .AddInMemorySubscriptions(); 
+
+builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
+
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+builder.Services.AddScoped<ITaskService, TaskService>();
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+
+builder.Services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
+builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
 
 
 builder.Services.AddAuthorization(options =>

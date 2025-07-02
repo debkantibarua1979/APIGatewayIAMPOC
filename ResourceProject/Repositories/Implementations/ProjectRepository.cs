@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using ResourceProject.Data;
 using ResourceProject.Entities;
+using ResourceProject.Repositories.Interfaces;
 
 namespace ResourceProject.Repositories.Implementations;
 
-public class ProjectRepository
+public class ProjectRepository: IProjectRepository
 {
     private readonly AppDbContext _context;
 
