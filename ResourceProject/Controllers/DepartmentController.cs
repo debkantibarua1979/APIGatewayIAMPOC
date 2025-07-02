@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ResourceProject.Entities;
 using ResourceProject.Services;
+using ResourceProject.Services.Interfaces;
 
 namespace ResourceProject.Controllers;
 

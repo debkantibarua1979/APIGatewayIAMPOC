@@ -1,4 +1,5 @@
 using ResourceProject.Repositories.Interfaces;
+using ResourceProject.Services.Interfaces;
 
 namespace ResourceProject.Services.Implementations;
 
