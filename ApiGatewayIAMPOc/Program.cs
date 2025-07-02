@@ -49,6 +49,8 @@ builder.Services.AddAuthentication()
         options.Audience = "apiResource";
     });
 
+
+
 builder.Services.AddControllers();
 
 var app = builder.Build();
