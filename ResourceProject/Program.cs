@@ -1,41 +1,100 @@
+using Microsoft.EntityFrameworkCore;
+using ResourceProject.Data;
+using ResourceProject.Resolvers.Mutations;
+using ResourceProject.Resolvers.Queries;
+using ResourceProject.Services.Implementations;
+using ResourceProject.Services.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddControllers();
+
+// Add Entity Framework and DbContext
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
+
+// Add services for Role, User, and RolePermission
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
+
+// Add GraphQL services
+builder.Services
+    .AddGraphQLServer()
+    .AddType<UserQuery>() 
+    .AddType<UserMutation>() 
+    .AddType<RoleQuery>() 
+    .AddType<RoleMutation>() 
+    .AddType<RolePermissionQuery>() 
+    .AddType<RolePermissionMutation>() 
+    .AddAuthorization() 
+    .AddInMemorySubscriptions(); 
+
+
+
+
+
+// Add Swagger for API documentation (optional, you can remove it if not needed)
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+        Description = "Please enter 'Bearer' followed by your token."
+    });
+    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("CanReadDepartment", policy =>
+        policy.RequireClaim("permission", "CanReadDepartment"));
+    options.AddPolicy("CanWriteDepartment", policy =>
+        policy.RequireClaim("permission", "CanWriteDepartment"));
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Middleware configuration
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseDeveloperExceptionPage();
 }
 
-app.UseHttpsRedirection();
-
-var summaries = new[]
+// Enable Swagger UI (optional)
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
+});
 
-app.MapGet("/weatherforecast", () =>
-    {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
-    })
-    .WithName("GetWeatherForecast");
+// Authentication and Authorization Middleware
+app.UseAuthentication();
+app.UseAuthorization();
 
+
+// Enable GraphQL Server
+app.MapGraphQL();
+
+// Map default controllers if any
+app.MapControllers();
+
+// Run the application
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
