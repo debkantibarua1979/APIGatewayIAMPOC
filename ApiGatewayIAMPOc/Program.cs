@@ -61,6 +61,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseMiddleware<TokenExpiryMiddleware>();
+app.UseMiddleware<TokenCheckerMiddleware>();
 
 app.MapControllers();
 app.Run();
