@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ResourceProject.Entities;
 using ResourceProject.Services;
@@ -17,6 +18,7 @@ public class DepartmentController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(policy: "CanViewDepartments")]
     public async Task<ActionResult<List<Department>>> GetAll()
     {
         var departments = await _service.GetAllAsync();
@@ -24,6 +26,7 @@ public class DepartmentController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(policy: "CanViewDepartments")]
     public async Task<ActionResult<Department>> GetById(Guid id)
     {
         var department = await _service.GetByIdAsync(id);
@@ -36,6 +39,7 @@ public class DepartmentController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(policy: "CanCreateDepartment")]
     public async Task<ActionResult<Department>> Create(Department department)
     {
         var created = await _service.CreateAsync(department);
@@ -43,6 +47,7 @@ public class DepartmentController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(policy: "CanUpdateDepartment")]
     public async Task<ActionResult<Department>> Update(Guid id, Department department)
     {
         if (id != department.Id)
@@ -55,6 +60,7 @@ public class DepartmentController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(policy: "CanDeleteDepartment")]
     public async Task<ActionResult> Delete(Guid id)
     {
         var deleted = await _service.DeleteAsync(id);

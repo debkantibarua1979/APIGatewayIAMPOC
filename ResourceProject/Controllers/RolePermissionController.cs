@@ -1,3 +1,4 @@
+using HotChocolate.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ResourceProject.Services.Interfaces;
 
@@ -17,6 +18,7 @@ public class RolePermissionController : ControllerBase
 
     // Get all permissions for a role
     [HttpGet("{roleId}/permissions")]
+    [Authorize(policy:"CanViewRolePermissions")]
     public async Task<IActionResult> GetPermissionsForRole(Guid roleId)
     {
         var permissions = await _rolePermissionService.GetPermissionsForRoleAsync(roleId);
@@ -30,6 +32,7 @@ public class RolePermissionController : ControllerBase
 
     // Get a role's permission by permissionId
     [HttpGet("{roleId}/permissions/{permissionId}")]
+    [Authorize(policy: "CanViewRolePermissions")]
     public async Task<IActionResult> GetPermissionForRole(Guid roleId, Guid permissionId)
     {
         var permission = await _rolePermissionService.GetPermissionForRoleAsync(roleId, permissionId);
@@ -43,6 +46,7 @@ public class RolePermissionController : ControllerBase
 
     // Add permission to role
     [HttpPost("{roleId}/permissions/{permissionId}")]
+    [Authorize(policy: "CanAssignPermissionToRole")]
     public async Task<IActionResult> AddPermissionToRole(Guid roleId, Guid permissionId)
     {
         var result = await _rolePermissionService.AddPermissionToRoleAsync(roleId, permissionId);
@@ -56,6 +60,7 @@ public class RolePermissionController : ControllerBase
 
     // Remove permission from role
     [HttpDelete("{roleId}/permissions/{permissionId}")]
+    [Authorize(policy: "CanRemovePermissionFromRole")]
     public async Task<IActionResult> RemovePermissionFromRole(Guid roleId, Guid permissionId)
     {
         var result = await _rolePermissionService.RemovePermissionFromRoleAsync(roleId, permissionId);

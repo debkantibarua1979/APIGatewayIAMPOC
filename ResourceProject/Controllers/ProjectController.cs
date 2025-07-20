@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using ResourceProject.Entities;
 using ResourceProject.Services;
 using ResourceProject.Services.Interfaces;
@@ -22,6 +23,7 @@ public class ProjectController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(policy:"CanViewProjects")]
     public async Task<ActionResult<List<Project>>> GetAll()
     {
         var projects = await _service.GetAllAsync();
@@ -29,6 +31,7 @@ public class ProjectController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(policy:"CanViewProject")]
     public async Task<ActionResult<Project>> GetById(Guid id)
     {
         var project = await _service.GetByIdAsync(id);
@@ -41,6 +44,7 @@ public class ProjectController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(policy:"CanCreateProject")]
     public async Task<ActionResult<Project>> Create(Project project)
     {
         var created = await _service.CreateAsync(project);
@@ -48,6 +52,7 @@ public class ProjectController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(policy:"CanUpdateProject")]
     public async Task<ActionResult<Project>> Update(Guid id, Project project)
     {
         if (id != project.Id)
@@ -60,6 +65,7 @@ public class ProjectController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(policy:"CanDeleteProject")]
     public async Task<ActionResult> Delete(Guid id)
     {
         var deleted = await _service.DeleteAsync(id);

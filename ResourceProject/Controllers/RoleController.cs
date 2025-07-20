@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ResourceProject.DTOs;
 using ResourceProject.Services.Interfaces;
@@ -18,6 +19,7 @@ namespace ResourceProject.Controllers;
 
         // Get all roles
         [HttpGet]
+        [Authorize(policy: "CanReadRoles")]
         public async Task<IActionResult> GetRoles()
         {
             var roles = await _roleService.GetRolesAsync();
@@ -26,6 +28,7 @@ namespace ResourceProject.Controllers;
 
         // Get a role by Id
         [HttpGet("{roleId}")]
+        [Authorize(policy: "CanReadRole")]
         public async Task<IActionResult> GetRoleById(Guid roleId)
         {
             var role = await _roleService.GetRoleByIdAsync(roleId);
@@ -38,6 +41,7 @@ namespace ResourceProject.Controllers;
 
         // Create a new role
         [HttpPost]
+        [Authorize(policy: "CanCreateRole")]
         public async Task<IActionResult> CreateRole([FromBody] CreateRoleDto createRoleDto)
         {
             if (createRoleDto == null)
@@ -56,6 +60,7 @@ namespace ResourceProject.Controllers;
 
         // Update role
         [HttpPut("{roleId}")]
+        [Authorize(policy: "CanUpdateRole")]
         public async Task<IActionResult> UpdateRole(Guid roleId, [FromBody] UpdateRoleDto updateRoleDto)
         {
             if (updateRoleDto == null)
@@ -74,6 +79,7 @@ namespace ResourceProject.Controllers;
 
         // Delete role
         [HttpDelete("{roleId}")]
+        [Authorize(policy: "CanDeleteRole")]
         public async Task<IActionResult> DeleteRole(Guid roleId)
         {
             var result = await _roleService.DeleteRoleAsync(roleId);
@@ -86,6 +92,7 @@ namespace ResourceProject.Controllers;
 
         // Assign a permission to a role
         [HttpPost("{roleId}/assign-permission/{permissionId}")]
+        [Authorize(policy: "CanAssignPermissionToRole")]
         public async Task<IActionResult> AssignPermissionToRole(Guid roleId, Guid permissionId)
         {
             var result = await _roleService.AssignPermissionToRoleAsync(roleId, permissionId);
